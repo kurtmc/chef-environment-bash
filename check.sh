@@ -1,3 +1,18 @@
+# This config relies on the following functions being defined
+# chef-show
+# chef-local
+# chef-prod
+
+export PS1="\u@\h \w\[$(tput sgr0)\]"
+update_prompt() {
+	if [ "$(chef-show)" == "local" ]; then
+		export PS1="\[\033[38;5;10m\]$(chef-show)\[$(tput sgr0)\]\[\033[38;5;15m\] \W\[$(tput sgr0)\] "
+	elif [ "$(chef-show)" == "prod" ]; then
+		export PS1="\[\033[38;5;9m\]$(chef-show)\[$(tput sgr0)\]\[\033[38;5;15m\] \W\[$(tput sgr0)\] "
+	fi
+}
+export PROMPT_COMMAND="update_prompt"
+
 preexec() {
 	if [[ $1 == chef-local* ]]; then
 		return
